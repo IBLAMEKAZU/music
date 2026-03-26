@@ -26,9 +26,9 @@ import yt_dlp
 # ─────────────────────────────────────────────
 # CONFIG  –  fill these before running
 # ─────────────────────────────────────────────
-BOT_TOKEN   = "YOUR_BOT_TOKEN_HERE"          # @BotFather token
-BOT_USERNAME = "YourBotUsername"             # without @
-OWNER_CHAT_ID = 123456789                    # your Telegram ID (int)
+BOT_TOKEN   = "8746618909:AAFTS7g8hv8qIlFdPNCRFESMftKXIyrFHqU"          # @BotFather token
+BOT_USERNAME = "@MUSIC_Flexxyrich_bot"             # without @
+OWNER_CHAT_ID = 7692722647                    # your Telegram ID (int)
 
 # Google-Drive photo folder links  (add as many as you like)
 PHOTO_FOLDERS = {
@@ -49,58 +49,7 @@ MUSIC_DIR.mkdir(exist_ok=True)
     SET_PASSWORD, CONFIRM_PASSWORD,
     ENTER_PASSWORD_VIEW,
     RESET_ASK_KEY, RESET_NEW_PASS, RESET_CONFIRM_PASS,
-    REGEN_KEYS_CONFIRM,
-    AWAIT_VIDEO_LINK,
-) = range(8)
-
-
-# ─────────────────────────────────────────────
-# DATABASE
-# ─────────────────────────────────────────────
-def get_db():
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def init_db():
-    with get_db() as conn:
-        conn.executescript("""
-        CREATE TABLE IF NOT EXISTS users (
-            chat_id     INTEGER PRIMARY KEY,
-            username    TEXT,
-            password    TEXT,          -- SHA-256 hash
-            keys        TEXT,          -- JSON list of 3 recovery keys
-            referred_by INTEGER
-        );
-
-        CREATE TABLE IF NOT EXISTS folders (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            chat_id     INTEGER NOT NULL,
-            name        TEXT    NOT NULL,
-            UNIQUE(chat_id, name)
-        );
-
-        CREATE TABLE IF NOT EXISTS songs (
-            id          INTEGER PRIMARY KEY AUTOINCREMENT,
-            folder_id   INTEGER NOT NULL,
-            title       TEXT    NOT NULL,
-            file_path   TEXT    NOT NULL,
-            FOREIGN KEY(folder_id) REFERENCES folders(id)
-        );
-        """)
-
-
-def hash_password(pw: str) -> str:
-    return hashlib.sha256(pw.encode()).hexdigest()
-
-
-def generate_keys(n=3, length=8) -> list:
-    return [
-        ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
-        for _ in range(n)
-    ]
-
+ 
 
 def get_user(chat_id: int):
     with get_db() as conn:
